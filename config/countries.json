@@ -1,66 +1,65 @@
 {
   "EU": {
-    "Austria": "IRLTLT01AUT156N",
-    "Belgium": "IRLTLT01BEL156N",
-    "Bulgaria": "",                   // no known FRED 10-yr
-    "Croatia": "",                    // no known FRED 10-yr
-    "Cyprus": "",                     // no known FRED 10-yr
-    "Czechia": "IRLTLT01CZE156N",
-    "Denmark": "IRLTLT01DNK156N",
-    "Estonia": "",                    // no known FRED 10-yr
-    "Finland": "IRLTLT01FIN156N",
-    "France": "IRLTLT01FRM156N",
-    "Germany": "IRLTLT01DEM156N",
-    "Greece": "IRLTLT01GRA156N",
-    "Hungary": "IRLTLT01HUN156N",
-    "Ireland": "IRLTLT01IRE156N",
-    "Italy": "IRLTLT01ITM156N",
-    "Latvia": "",                     // no known FRED 10-yr
-    "Lithuania": "",                  // no known FRED 10-yr
-    "Luxembourg": "",                 // no known FRED 10-yr
-    "Malta": "",                      // no known FRED 10-yr
-    "Netherlands": "IRLTLT01NLD156N",
-    "Poland": "",                     // might exist in OECD but not sure FRED
-    "Portugal": "IRLTLT01PRT156N",
-    "Romania": "",                    // no known FRED 10-yr
-    "Slovakia": "",                   // no known FRED 10-yr
-    "Slovenia": "",                   // no known FRED 10-yr
-    "Spain": "IRLTLT01ESP156N",
-    "Sweden": "IRLTLT01SWE156N"
+    "Austria": { "fred": "IRLTLT01AUT156N" },
+    "Belgium": { "fred": "IRLTLT01BEL156N" },
+    "Bulgaria": { "api": "BG10Y" },      
+    "Croatia": { "api": "HR10Y" },
+    "Cyprus": { "api": "CY10Y" },
+    "Czechia": { "fred": "IRLTLT01CZE156N" },
+    "Denmark": { "fred": "IRLTLT01DNK156N" },
+    "Estonia": { "api": "EE10Y" },
+    "Finland": { "fred": "IRLTLT01FIN156N" },
+    "France": { "fred": "IRLTLT01FRM156N" },
+    "Germany": { "fred": "IRLTLT01DEM156N" },
+    "Greece": { "fred": "IRLTLT01GRA156N" },
+    "Hungary": { "fred": "IRLTLT01HUN156N" },
+    "Ireland": { "fred": "IRLTLT01IRE156N" },
+    "Italy": { "fred": "IRLTLT01ITM156N" },
+    "Latvia": { "api": "LV10Y" },
+    "Lithuania": { "api": "LT10Y" },
+    "Luxembourg": { "api": "LU10Y" },
+    "Malta": { "api": "MT10Y" },
+    "Netherlands": { "fred": "IRLTLT01NLD156N" },
+    "Poland": { "api": "PL10Y" },
+    "Portugal": { "fred": "IRLTLT01PRT156N" },
+    "Romania": { "api": "RO10Y" },
+    "Slovakia": { "api": "SK10Y" },
+    "Slovenia": { "api": "SI10Y" },
+    "Spain": { "fred": "IRLTLT01ESP156N" },
+    "Sweden": { "fred": "IRLTLT01SWE156N" }
   },
   "non-EU": {
-    "United States": "DGS10",             // U.S. treasury 10-yr (FRED) (or IRLTLT01USM156N) :contentReference[oaicite:0]{index=0}
-    "United Kingdom": "IRLTLT01GBM156N",
-    "Switzerland": "IRLTLT01CHE156N",
-    "Norway": "IRLTLT01NOM156N",
-    "Canada": "IRLTLT01CAM156N",          // Series exists for Canada :contentReference[oaicite:1]{index=1}
-    "Australia": "IRLTLT01AUS156N",
-    "Japan": "IRLTLT01JPM156N",
-    "Brazil": "",                         // likely EMBI needed
-    "Mexico": "",                         // likely EMBI
-    "Argentina": "",                      // likely EMBI
-    "Chile": "",                          // likely EMBI
-    "Colombia": "",                       // likely EMBI
-    "Peru": "",                           // likely EMBI
-    "Turkey": "",                         // likely EMBI or local
-    "South Africa": "",                   // likely EMBI
-    "Egypt": "",                          // likely EMBI
-    "Saudi Arabia": "",                   // likely EMBI or local
-    "Russia": "",                         // likely EMBI
-    "India": "",                          // maybe OECD series but not sure
-    "China": "",                          // likely local bond markets
-    "Indonesia": "",                      // likely local bond markets
-    "Thailand": "",                       // likely local
-    "Malaysia": "",                       // likely local
-    "Philippines": "",                    // likely local
-    "South Korea": "IRLTLT01KRM156N",
-    "Israel": "",                         // EMBI or local
-    "Nigeria": "",                        // local / EMBI
-    "Kenya": "",                          // local / EMBI
-    "Pakistan": "",                       // local / EMBI
-    "Bangladesh": "",                     // local
-    "Vietnam": "",                        // local
-    "Ukraine": ""                         // special case
+    "United States": { "fred": "DGS10", "api": "US10Y" },
+    "United Kingdom": { "fred": "IRLTLT01GBM156N" },
+    "Switzerland": { "fred": "IRLTLT01CHE156N" },
+    "Norway": { "fred": "IRLTLT01NOM156N" },
+    "Canada": { "fred": "IRLTLT01CAM156N", "api": "CA10Y" },
+    "Australia": { "fred": "IRLTLT01AUS156N" },
+    "Japan": { "fred": "IRLTLT01JPM156N" },
+    "Brazil": { "api": "BR10Y" },
+    "Mexico": { "api": "MX10Y" },
+    "Argentina": { "api": "AR10Y" },
+    "Chile": { "api": "CL10Y" },
+    "Colombia": { "api": "CO10Y" },
+    "Peru": { "api": "PE10Y" },
+    "Turkey": { "api": "TR10Y" },
+    "South Africa": { "api": "ZA10Y" },
+    "Egypt": { "api": "EG10Y" },
+    "Saudi Arabia": { "api": "SA10Y" },
+    "Russia": { "api": "RU10Y" },
+    "India": { "api": "IN10Y" },
+    "China": { "api": "CN10Y" },
+    "Indonesia": { "api": "ID10Y" },
+    "Thailand": { "api": "TH10Y" },
+    "Malaysia": { "api": "MY10Y" },
+    "Philippines": { "api": "PH10Y" },
+    "South Korea": { "fred": "IRLTLT01KRM156N" },
+    "Israel": { "api": "IL10Y" },
+    "Nigeria": { "api": "NG10Y" },
+    "Kenya": { "api": "KE10Y" },
+    "Pakistan": { "api": "PK10Y" },
+    "Bangladesh": { "api": "BD10Y" },
+    "Vietnam": { "api": "VN10Y" },
+    "Ukraine": { "api": "UA10Y" }
   }
 }
-
