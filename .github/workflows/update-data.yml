@@ -2,8 +2,8 @@ name: Update CDS Proxy Data
 
 on:
   schedule:
-    - cron: '0 2 * * *'  # Runs daily at 2 AM UTC
-  workflow_dispatch:     # Allows manual run
+    - cron: '0 2 * * *'
+  workflow_dispatch:
 
 jobs:
   update:
@@ -17,31 +17,16 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Create script directory
-        run: mkdir -p scripts
+      - name: Create directories
+        run: mkdir -p scripts data
 
-      - name: Create fetcher script
+      - name: Create fetcher script (CommonJS - .js)
         run: |
-          cat > scripts/fetch-cds-data.mjs << 'EOF'
-          import fs from 'fs';
-          import path from 'path';
-
+          cat > scripts/fetch-cds-data.js << 'EOF'
+          const fs = require('fs');
           const https = require('https');
 
-          // Helper to fetch CSV without node-fetch (to avoid npm)
-          function fetchCsv(url) {
-            return new Promise((resolve, reject) => {
-              https.get(url, (res) => {
-                let data = '';
-                res.on('data', chunk => data += chunk);
-                res.on('end', () => resolve(data));
-              }).on('error', reject);
-            });
-          }
-
-          const DATA_DIR = './data';
-          if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-
+          // Read country config
           const config = JSON.parse(fs.readFileSync('./config/countries.json', 'utf8'));
 
           const YEARS = 3;
@@ -49,45 +34,76 @@ jobs:
           cutoffDate.setFullYear(cutoffDate.getFullYear() - YEARS);
           const cutoffStr = cutoffDate.toISOString().split('T')[0];
 
-          console.log(`Fetching from ${cutoffStr}...`);
+          console.log('Fetching data from:', cutoffStr);
+
+          function fetchCsv(url) {
+            return new Promise((resolve, reject) => {
+              https.get(url, (res) => {
+                let data = '';
+                res.on('data', chunk => data += chunk);
+                res.on('end', () => resolve(data));
+                res.on('error', reject);
+              }).on('error', reject);
+            });
+          }
 
           async function fetchFredSeries(seriesId) {
             const url = `https://fred.stlouisfed.org/graph/fredgraph.csv?id=${seriesId}`;
-            console.log(`→ ${seriesId}`);
+            console.log('→', seriesId);
             try {
               const text = await fetchCsv(url);
               const lines = text.trim().split('\n');
               const data = {};
+
               for (let i = 1; i < lines.length; i++) {
-                const [date, value] = lines[i].split(',');
-                if (value && value !== '.' && date >= cutoffStr) {
+                // Handle CSV lines (some may have quoted fields)
+                let line = lines[i].trim();
+                if (!line) continue;
+
+                // Simple split: assume no commas inside values (true for FRED)
+                const parts = line.split(',');
+                if (parts.length < 2) continue;
+
+                let date = parts[0].replace(/"/g, '');
+                let value = parts[1].replace(/"/g, '');
+
+                if (date && value && value !== '.' && date >= cutoffStr) {
                   const num = parseFloat(value);
-                  if (!isNaN(num)) data[date] = num;
+                  if (!isNaN(num)) {
+                    data[date] = num;
+                  }
                 }
               }
               return data;
             } catch (e) {
-              console.error(`Error ${seriesId}:`, e.message);
+              console.error(`❌ Failed to fetch ${seriesId}:`, e.message);
               return {};
             }
           }
 
           (async () => {
-            const allData = {};
-            for (const [group, countries] of Object.entries(config)) {
-              allData[group] = {};
-              for (const [country, seriesId] of Object.entries(countries)) {
-                allData[group][country] = await fetchFredSeries(seriesId);
-                await new Promise(r => setTimeout(r, 500)); // be polite
+            try {
+              const allData = {};
+              for (const [group, countries] of Object.entries(config)) {
+                allData[group] = {};
+                for (const [country, seriesId] of Object.entries(countries)) {
+                  allData[group][country] = await fetchFredSeries(seriesId);
+                  // Be polite: wait 800ms between requests
+                  await new Promise(r => setTimeout(r, 800));
+                }
               }
+
+              fs.writeFileSync('./data/cds-proxies.json', JSON.stringify(allData, null, 2));
+              console.log('✅ Data successfully saved!');
+            } catch (e) {
+              console.error('💥 Fatal error:', e);
+              process.exit(1);
             }
-            fs.writeFileSync('./data/cds-proxies.json', JSON.stringify(allData, null, 2));
-            console.log('✅ Data saved!');
           })();
           EOF
 
       - name: Run the script
-        run: node scripts/fetch-cds-data.mjs
+        run: node scripts/fetch-cds-data.js
 
       - name: Commit changes
         run: |
@@ -98,5 +114,5 @@ jobs:
             git commit -m "chore: auto-update CDS proxy data $(date -u +'%Y-%m-%d')"
             git push
           else
-            echo "No changes"
+            echo "No changes to commit"
           fi
