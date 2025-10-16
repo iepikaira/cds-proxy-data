@@ -1,0 +1,21 @@
+{
+  "EU": {
+    "Italy": "IT10YR",
+    "Spain": "ES10YR",
+    "Greece": "GR10YR",
+    "Portugal": "PT10YR",
+    "France": "FR10YR",
+    "Netherlands": "NL10YR",
+    "Belgium": "BE10YR"
+  },
+  "non-EU": {
+    "United States": "DGS10", 
+    "United Kingdom": "IUMAJG20",
+    "Brazil": "BZEMBI",
+    "Turkey": "TCURDSR",
+    "Mexico": "MXEMBI",
+    "South Africa": "ZAEMBI",
+    "India": "INEMBI",
+    "China": "CNEMBI"
+  }
+}
